@@ -1,0 +1,23 @@
+[
+ {"doc":"01_delivery","subject":"At-least-once delivery","predicate":"може спричиняти","object":"Duplicate events"},
+ {"doc":"01_delivery","subject":"Idempotent consumer","predicate":"захищає від","object":"Duplicate events"},
+ {"doc":"01_delivery","subject":"Stable event ID","predicate":"підтримує","object":"Idempotent consumer"},
+ {"doc":"02_outbox","subject":"Transactional outbox","predicate":"запобігає втраті","object":"Published events"},
+ {"doc":"02_outbox","subject":"Transactional outbox","predicate":"вимагає доповнення","object":"Idempotent consumer"},
+ {"doc":"02_outbox","subject":"Transactional outbox","predicate":"використовує","object":"Database transaction"},
+ {"doc":"03_retries","subject":"Exponential backoff","predicate":"знижує","object":"Retry storm"},
+ {"doc":"03_retries","subject":"Dead-letter queue","predicate":"зберігає","object":"Failed events"},
+ {"doc":"03_retries","subject":"Retries","predicate":"вимагає","object":"Idempotent consumer"},
+ {"doc":"03_retries","subject":"Retry metrics","predicate":"допомагає відстежувати","object":"Retries"},
+ {"doc":"04_observability","subject":"Correlation ID","predicate":"зв'язує","object":"Distributed tracing"},
+ {"doc":"04_observability","subject":"Consumer lag","predicate":"виявляє","object":"Processing delay"},
+ {"doc":"04_observability","subject":"Consumer lag alerts","predicate":"відстежує","object":"Consumer lag"},
+ {"doc":"05_contracts","subject":"Schema registry","predicate":"керує","object":"Event schema versions"},
+ {"doc":"05_contracts","subject":"Backward compatibility","predicate":"зменшує","object":"Consumer incompatibility"},
+ {"doc":"05_contracts","subject":"Contract testing","predicate":"перевіряє","object":"Event schema versions"},
+ {"doc":"06_recovery","subject":"Event replay","predicate":"вимагає","object":"Idempotent consumer"},
+ {"doc":"06_recovery","subject":"Event replay","predicate":"вимагає","object":"Backward compatibility"},
+ {"doc":"06_recovery","subject":"Incident response","predicate":"аналізує","object":"Consumer lag"},
+ {"doc":"06_recovery","subject":"Incident response","predicate":"використовує","object":"Distributed tracing"},
+ {"doc":"06_recovery","subject":"Incident response","predicate":"аналізує","object":"Dead-letter queue"}
+]
