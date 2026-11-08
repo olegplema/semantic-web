@@ -89,6 +89,7 @@ def load_fixture_facts(chunks: list[Chunk]) -> list[dict[str, str]]:
 
 def extract_facts(chunks: list[Chunk], llm: Any) -> list[dict[str, str]]:
     facts = []
+    chunk_docs = {chunk.doc for chunk in chunks}
     for chunk in chunks:
         prompt = (
             "Виділи лише факти, явно підтримані текстом. Поверни лише JSON-масив об'єктів "
@@ -96,10 +97,17 @@ def extract_facts(chunks: list[Chunk], llm: Any) -> list[dict[str, str]]:
             "Не вигадуй фактів; назви однакових сутностей нормалізуй. Не більше 8 фактів на фрагмент.\n\n"
             f"Документ: {chunk.doc}\nТекст: {chunk.text}"
         )
-        items = parse_json_array(llm.generate(prompt))
-        for item in items:
-            facts.append({"doc": chunk.doc, **item})
-    return validate_facts(facts, {chunk.doc for chunk in chunks})
+        raw = llm.generate(prompt)
+        try:
+            items = parse_json_array(raw)
+            chunk_facts = validate_facts([{"doc": chunk.doc, **item} for item in items], chunk_docs)
+        except ValueError:
+            invalidate = getattr(llm, "invalidate_cache", None)
+            if invalidate is not None:
+                invalidate(prompt)
+            raise
+        facts.extend(chunk_facts)
+    return facts
 
 
 def parse_json_array(raw: str) -> list[dict[str, str]]:

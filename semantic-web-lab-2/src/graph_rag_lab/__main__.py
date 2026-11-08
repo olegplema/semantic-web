@@ -9,7 +9,7 @@ from .core import (
     graph_stats, keyword_search, load_chunks, vector_rag_answer,
     vector_search, visualize,
 )
-from .llm import HTTPModel
+from .llm import DEFAULT_CACHE_DIR, HTTPModel
 
 
 def write_json(path: Path, payload: object) -> None:
@@ -22,7 +22,7 @@ def run(args: argparse.Namespace) -> None:
     questions = json.loads((ROOT / "data" / "questions.json").read_text(encoding="utf-8"))
     question = questions["global"][0]
     output = Path(args.output).resolve()
-    llm = HTTPModel(args.provider, args.model)
+    llm = HTTPModel(args.provider, args.model, cache_dir=args.cache_dir, max_attempts=args.max_attempts)
     facts = extract_facts(chunks, llm)
     origin = f"extracted using {args.provider}/{llm.model}"
     graph = build_graph(facts)
@@ -91,7 +91,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Knowledge graph, community summaries, GraphRAG vs vector-RAG")
     parser.add_argument("command", choices=["run", "search"], help="run: повний пайплайн з LLM, search: порівняння retrieval")
     parser.add_argument("--provider", choices=["ollama", "gemini"], default=None)
-    parser.add_argument("--model", help="Назва моделі Ollama або Gemini")
+    parser.add_argument("--model", help="Назва моделі (типово: gemma3:4b для Ollama, gemini-3.5-flash-lite для Gemini)")
+    parser.add_argument("--cache-dir", default=str(DEFAULT_CACHE_DIR), help="Каталог постійного кешу успішних LLM-відповідей")
+    parser.add_argument("--max-attempts", type=int, default=5, help="Максимальна кількість спроб одного API-запиту, включно з першою (типово: 5)")
     parser.add_argument("--search", choices=["tfidf", "semantic"], default="tfidf")
     parser.add_argument("--top-k", type=int, default=3)
     parser.add_argument("--chunk-size", type=int, default=1100)
@@ -99,6 +101,8 @@ def main() -> None:
     args = parser.parse_args()
     if args.top_k < 1 or args.chunk_size < 100:
         parser.error("--top-k має бути >= 1, --chunk-size має бути >= 100")
+    if args.max_attempts < 1:
+        parser.error("--max-attempts має бути >= 1")
     if args.provider is None:
         args.provider = "ollama"
     if args.command == "search":
@@ -110,7 +114,11 @@ def main() -> None:
             for result in row["results"]:
                 print(f"  {result['chunk']}: {result['score']:.4f}")
     else:
-        run(args)
+        try:
+            run(args)
+        except (RuntimeError, ValueError, OSError) as error:
+            parser.exit(1, f"Помилка: {error}\nУспішні LLM-запити збережено в кеші {args.cache_dir}. "
+                        "Повторіть ту саму команду після усунення причини збою.\n")
 
 
 if __name__ == "__main__":
