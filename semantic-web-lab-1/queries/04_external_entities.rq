@@ -1,0 +1,14 @@
+PREFIX ex: <https://example.org/semantic-lab/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT DISTINCT ?localLanguage ?wikidataEntity ?externalName
+WHERE {
+  GRAPH ex:local {
+    ?language a ex:ProgrammingLanguage ; rdfs:label ?localLanguage ; skos:exactMatch ?wikidataEntity .
+  }
+  GRAPH ex:external {
+    ?wikidataEntity rdfs:label ?externalName .
+    FILTER(LANG(?externalName) = "en")
+  }
+}
+ORDER BY ?localLanguage

@@ -1,0 +1,13 @@
+PREFIX ex: <https://example.org/semantic-lab/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?projectName ?languageName ?difficulty
+WHERE {
+  GRAPH ex:local {
+    ?project a ex:SoftwareProject ;
+             rdfs:label ?projectName ;
+             ex:usesLanguage ?lang ;
+             ex:difficulty ?difficulty .
+    ?lang rdfs:label ?languageName .
+  }
+}
+ORDER BY ?projectName ?languageName

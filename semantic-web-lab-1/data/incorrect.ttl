@@ -1,0 +1,5 @@
+@prefix ex: <https://example.org/semantic-lab/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+# ПОМИЛКА: проєкт НЕ є тією ж сутністю, що мова Java.
+ex:backendApi owl:sameAs <http://www.wikidata.org/entity/Q251> .

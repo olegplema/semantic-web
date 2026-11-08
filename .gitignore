@@ -1,0 +1,22 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# IDE
+.idea/
+.vscode/
+
+# Generated files
+output/
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db

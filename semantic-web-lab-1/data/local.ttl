@@ -1,0 +1,35 @@
+@prefix ex: <https://example.org/semantic-lab/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+# Локальний каталог навчальних проєктів і технологій.
+ex:SoftwareProject a rdfs:Class ; rdfs:label "Програмний проєкт"@uk .
+ex:ProgrammingLanguage a rdfs:Class ; rdfs:label "Мова програмування"@uk .
+ex:usesLanguage a rdf:Property ; rdfs:domain ex:SoftwareProject ; rdfs:range ex:ProgrammingLanguage ; rdfs:label "використовує мову"@uk .
+ex:difficulty a rdf:Property ; rdfs:label "складність"@uk .
+ex:githubUrl a rdf:Property ; rdfs:label "адреса репозиторію"@uk .
+
+ex:Java a ex:ProgrammingLanguage ;
+    rdfs:label "Java"@en ;
+    skos:exactMatch <http://www.wikidata.org/entity/Q251> .
+
+ex:Python a ex:ProgrammingLanguage ;
+    rdfs:label "Python"@en ;
+    skos:exactMatch <http://www.wikidata.org/entity/Q28865> .
+
+ex:backendApi a ex:SoftwareProject ;
+    rdfs:label "Backend API"@en ;
+    ex:usesLanguage ex:Java ;
+    ex:difficulty "середня"@uk .
+
+ex:dataAnalyzer a ex:SoftwareProject ;
+    rdfs:label "Data Analyzer"@en ;
+    ex:usesLanguage ex:Python ;
+    ex:difficulty "початкова"@uk .
+
+ex:automationService a ex:SoftwareProject ;
+    rdfs:label "Automation Service"@en ;
+    ex:usesLanguage ex:Java, ex:Python ;
+    ex:difficulty "висока"@uk .

@@ -1,0 +1,11 @@
+PREFIX ex: <https://example.org/semantic-lab/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?languageName (COUNT(DISTINCT ?project) AS ?projectCount)
+WHERE {
+  GRAPH ex:local {
+    ?project a ex:SoftwareProject ; ex:usesLanguage ?language .
+    ?language rdfs:label ?languageName .
+  }
+}
+GROUP BY ?languageName
+ORDER BY DESC(?projectCount) ?languageName

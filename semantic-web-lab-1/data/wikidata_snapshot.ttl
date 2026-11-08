@@ -1,0 +1,10 @@
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix wdt: <http://www.wikidata.org/prop/direct/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Локальний навчальний знімок ВИБРАНИХ тверджень Wikidata, а не повна копія Wikidata.
+# Джерела: https://www.wikidata.org/wiki/Q251 та https://www.wikidata.org/wiki/Q28865
+# Q9143 = programming language, P31 = instance of.
+wd:Q251 rdfs:label "Java"@en ; wdt:P31 wd:Q9143 .
+wd:Q28865 rdfs:label "Python"@en ; wdt:P31 wd:Q9143 .
+wd:Q9143 rdfs:label "programming language"@en .
